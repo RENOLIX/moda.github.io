@@ -1,12 +1,12 @@
 const products = [
   { id:'sneakers-azur', name:'Sneakers Azur 01', category:'Baskets', price:8900, image:'public/sneakers-urbaines.png', colors:['Blanc / Bleu','Blanc / Graphite'], sizes:['40','41','42','43','44'], badge:'NOUVEAU', description:'Une basket basse au profil net, pensée pour la ville. Tige effet cuir, empiècements contrastés et semelle confortable pour un style précis du matin au soir.' },
-  { id:'hoodie-noir', name:'Hoodie Essential Noir', category:'Sweats', price:6200, image:'public/hoodie-essentiel.png', colors:['Noir','Graphite'], sizes:['S','M','L','XL','XXL'], badge:'NOUVEAU', description:'Hoodie lourd à coupe oversize, intérieur doux et finitions côtelées. Une pièce essentielle qui garde une silhouette structurée.' },
-  { id:'cargo-graphite', name:'Cargo Technique Graphite', category:'Pantalons', price:7400, image:'public/cargo-technique.png', colors:['Graphite','Noir'], sizes:['38','40','42','44','46'], badge:'BEST', description:'Pantalon cargo en toile technique mate, doté de poches fonctionnelles et d’une coupe droite moderne. Facile à associer aux sneakers comme aux vestes.' },
-  { id:'varsity-navy', name:'Veste Varsity Navy', category:'Vestes', price:9800, image:'public/veste-varsity.png', colors:['Marine','Noir'], sizes:['M','L','XL','XXL'], badge:'NOUVEAU', description:'Veste varsity premium en bleu nuit, soulignée de finitions blanches. Sa coupe décontractée donne immédiatement du caractère à une tenue simple.' },
+  { id:'hoodie-noir', name:'Hoodie Essential Noir', category:'Vêtements', price:6200, image:'public/hoodie-essentiel.png', colors:['Noir','Graphite'], sizes:['S','M','L','XL','XXL'], badge:'NOUVEAU', description:'Hoodie lourd à coupe oversize, intérieur doux et finitions côtelées. Une pièce essentielle qui garde une silhouette structurée.' },
+  { id:'cargo-graphite', name:'Cargo Technique Graphite', category:'Vêtements', price:7400, image:'public/cargo-technique.png', colors:['Graphite','Noir'], sizes:['38','40','42','44','46'], badge:'BEST', description:'Pantalon cargo en toile technique mate, doté de poches fonctionnelles et d’une coupe droite moderne. Facile à associer aux sneakers comme aux vestes.' },
+  { id:'varsity-navy', name:'Veste Varsity Navy', category:'Vêtements', price:9800, image:'public/veste-varsity.png', colors:['Marine','Noir'], sizes:['M','L','XL','XXL'], badge:'NOUVEAU', description:'Veste varsity premium en bleu nuit, soulignée de finitions blanches. Sa coupe décontractée donne immédiatement du caractère à une tenue simple.' },
   { id:'sneakers-mono', name:'Sneakers Mono 02', category:'Baskets', price:8500, image:'public/sneakers-urbaines.png', colors:['Blanc / Graphite'], sizes:['40','41','42','43','44'], badge:null, description:'Une version monochrome et facile à porter de notre basket urbaine, avec une semelle souple et une construction confortable.' },
-  { id:'hoodie-graphite', name:'Hoodie Essential Graphite', category:'Sweats', price:6200, image:'public/hoodie-essentiel.png', colors:['Graphite'], sizes:['S','M','L','XL','XXL'], badge:null, description:'Le hoodie essentiel décliné dans une nuance graphite profonde, avec une coupe généreuse et des finitions robustes.' },
-  { id:'cargo-noir', name:'Cargo Technique Noir', category:'Pantalons', price:7400, image:'public/cargo-technique.png', colors:['Noir'], sizes:['38','40','42','44','46'], badge:null, description:'Cargo noir polyvalent, construit pour bouger et garder une ligne nette grâce à son tissu technique et ses poches structurées.' },
-  { id:'varsity-black', name:'Veste Varsity Black', category:'Vestes', price:9800, image:'public/veste-varsity.png', colors:['Noir'], sizes:['M','L','XL','XXL'], badge:'LIMITÉ', description:'Une varsity sombre aux contrastes maîtrisés, idéale pour superposer les looks de mi-saison.' }
+  { id:'hoodie-graphite', name:'Hoodie Essential Graphite', category:'Vêtements', price:6200, image:'public/hoodie-essentiel.png', colors:['Graphite'], sizes:['S','M','L','XL','XXL'], badge:null, description:'Le hoodie essentiel décliné dans une nuance graphite profonde, avec une coupe généreuse et des finitions robustes.' },
+  { id:'cargo-noir', name:'Cargo Technique Noir', category:'Vêtements', price:7400, image:'public/cargo-technique.png', colors:['Noir'], sizes:['38','40','42','44','46'], badge:null, description:'Cargo noir polyvalent, construit pour bouger et garder une ligne nette grâce à son tissu technique et ses poches structurées.' },
+  { id:'varsity-black', name:'Veste Varsity Black', category:'Vêtements', price:9800, image:'public/veste-varsity.png', colors:['Noir'], sizes:['M','L','XL','XXL'], badge:'LIMITÉ', description:'Une varsity sombre aux contrastes maîtrisés, idéale pour superposer les looks de mi-saison.' }
 ];
 
 const money = value => `${new Intl.NumberFormat('fr-DZ').format(value)} DA`;
@@ -17,10 +17,12 @@ function cartQuantity(){ return loadCart().reduce((sum,item)=>sum+item.qty,0); }
 function updateCartCount(){ document.querySelectorAll('.cart-count').forEach(el => el.textContent = cartQuantity()); }
 
 function header(){
+  const currentPage = document.body.dataset.page;
+  const currentCategory = document.body.dataset.category;
   return `<header class="header"><div class="container nav">
     <a class="brand" href="index.html" aria-label="Moda Afair — Accueil"><img src="public/logo-moda-afair.png" alt="Moda Afair"></a>
     <nav class="nav-links" aria-label="Navigation principale">
-      <a class="active" href="index.html">Accueil</a><a href="index.html#collection">Collection</a><a href="index.html#nouveautes">Nouveautés</a><span class="nav-dropdown">Articles⌄</span><a href="index.html#nouveautes">Baskets</a><a href="index.html#nouveautes">Sweats</a><a href="index.html#nouveautes">Pantalons</a><a href="index.html#nouveautes">Vestes</a>
+      <a class="${currentPage==='home'?'active':''}" href="index.html">Accueil</a><a href="index.html#collection">Collection</a><a href="index.html#nouveautes">Nouveautés</a><a class="${currentCategory==='Vêtements'?'active':''}" href="vetements.html">Vêtements</a><a class="${currentCategory==='Baskets'?'active':''}" href="baskets.html">Baskets</a>
     </nav>
     <div class="nav-actions"><button class="nav-icon" aria-label="Rechercher"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4 4"></path></svg></button><a class="nav-icon navbar-cart" href="panier.html" aria-label="Voir le panier"><svg viewBox="0 0 24 24"><path d="M6 8h12l-1 12H7L6 8Z"></path><path d="M9 8V6a3 3 0 0 1 6 0v2"></path></svg><span class="cart-count">0</span></a><span class="nav-icon" aria-label="Compte"><svg viewBox="0 0 24 24"><path d="M6.5 20v-2.5a5.5 5.5 0 0 1 11 0V20"></path><circle cx="12" cy="7" r="3.5"></circle></svg></span><button class="menu-btn" aria-label="Ouvrir le menu" onclick="document.body.classList.toggle('menu-open')"><span></span><span></span><span></span></button></div>
   </div></header>`;
@@ -29,7 +31,7 @@ function header(){
 function footer(){
   return `<footer class="footer"><div class="container">
     <div class="footer-grid"><div><img class="footer-logo" src="public/logo-moda-afair.png" alt="Moda Afair"><p>Baskets et vêtements homme sélectionnés pour un style urbain, net et actuel.</p></div>
-    <div><h3>Navigation</h3><div class="footer-links"><a href="index.html">Accueil</a><a href="index.html#collection">Collection</a><a href="panier.html">Panier</a></div></div>
+    <div><h3>Navigation</h3><div class="footer-links"><a href="index.html">Accueil</a><a href="baskets.html">Baskets</a><a href="vetements.html">Vêtements</a><a href="panier.html">Panier</a></div></div>
     <div><h3>Informations</h3><div class="footer-links"><a href="#">Livraison</a><a href="#">Échanges</a><a href="#">Guide des tailles</a></div></div>
     <div><h3>Nous contacter</h3><p>Afair, Algérie<br>Dim–Jeu · 09h–18h<br>Instagram · Facebook</p></div></div>
     <div class="copyright"><span>© 2026 MODA AFAIR — Tous droits réservés.</span><span>Style masculin, sans compromis.</span></div>
@@ -52,11 +54,19 @@ function renderHome(){
         <div class="hero__frame-border"></div>
       </div>
     </section>
-    <section class="section reveal" id="collection"><div class="container"><div class="section-head"><div><span class="eyebrow">La Maison Moda</span><h2>Notre Collection</h2></div><p>Des pièces pensées pour révéler votre style.</p></div><div class="category-grid"><a class="category sneakers reveal reveal-delay-1" href="#nouveautes"><div class="category-copy"><h3>BASKETS</h3><p>Baskets urbaines pour toutes les occasions</p></div></a><a class="category clothes reveal reveal-delay-2" href="#nouveautes"><div class="category-copy"><h3>VÊTEMENTS</h3><p>Des essentiels modernes et raffinés</p></div></a></div></div></section>
+    <section class="section reveal" id="collection"><div class="container"><div class="section-head"><div><span class="eyebrow">La Maison Moda</span><h2>Notre Collection</h2></div><p>Des pièces pensées pour révéler votre style.</p></div><div class="category-grid"><a class="category sneakers reveal reveal-delay-1" href="baskets.html"><div class="category-copy"><h3>BASKETS</h3><p>Baskets urbaines pour toutes les occasions</p></div></a><a class="category clothes reveal reveal-delay-2" href="vetements.html"><div class="category-copy"><h3>VÊTEMENTS</h3><p>Des essentiels modernes et raffinés</p></div></a></div></div></section>
     <section class="section section-soft reveal" id="nouveautes"><div class="container"><div class="section-head"><div><span class="eyebrow">Dernières arrivées</span><h2>Les nouveautés</h2></div><p>Découvrez les dernières pièces de notre collection.</p></div><div class="product-grid">${products.map(productCard).join('')}</div></div></section>
     <section class="editorial-promo reveal"><div class="editorial-promo__media"><img src="public/hero-moda.png" alt="Look masculin Moda Afair"></div><div class="editorial-promo__copy"><span class="eyebrow">Sélection Moda</span><h2>Le look de la semaine</h2><p>Une silhouette urbaine complète, construite autour de pièces sobres, fortes et faciles à porter.</p><a class="editorial-promo__link" href="produit.html?id=varsity-navy">Découvrir la sélection <span>↗</span></a></div></section>
     <section class="service-strip reveal"><div class="service-line"><svg viewBox="0 0 48 48"><path d="M5 14h27v20H5zM32 23h7l5 6v5H32zM12 38a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm25 0a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"></path></svg><h3>Livraison à domicile</h3><p>Recevez vos commandes directement chez vous.</p></div><div class="service-line"><svg viewBox="0 0 48 48"><path d="m7 19 17-10 17 10v22H7zM18 41V29h12v12"></path></svg><h3>Livraison au bureau</h3><p>Faites livrer votre commande à votre lieu de travail.</p></div><div class="service-line"><svg viewBox="0 0 48 48"><rect x="6" y="14" width="36" height="23" rx="4"></rect><circle cx="24" cy="25.5" r="4"></circle></svg><h3>Paiement à la livraison</h3><p>Paiement en espèces à la réception de votre commande.</p></div><div class="service-line"><svg viewBox="0 0 48 48"><path d="M7 10h34v23H19L9 41v-8H7z"></path></svg><h3>Service client</h3><p>Une équipe disponible pour vous accompagner.</p></div></section>
     </main>${footer()}`;
+}
+
+function renderCategory(){
+  const category = document.body.dataset.category === 'Baskets' ? 'Baskets' : 'Vêtements';
+  const categoryProducts = products.filter(product=>product.category===category);
+  const intro = category === 'Baskets' ? 'Découvrez toutes nos baskets urbaines.' : 'Découvrez tous nos vêtements homme.';
+  document.title = `${category} — Moda Afair`;
+  document.querySelector('#app').innerHTML = `${header()}<main><div class="page-title"><div class="container"><div class="breadcrumbs"><a href="index.html">Accueil</a> / ${category}</div><h1>${category}</h1></div></div><section class="section section-soft"><div class="container"><div class="section-head"><div><span class="eyebrow">Collection Moda</span><h2>${category}</h2></div><p>${intro}</p></div><div class="product-grid">${categoryProducts.map(productCard).join('')}</div></div></section></main>${footer()}`;
 }
 
 function renderProduct(){
@@ -87,6 +97,7 @@ function initScrollReveal(){ const items=document.querySelectorAll('.reveal'); i
 
 const page=document.body.dataset.page;
 if(page==='home') renderHome();
+if(page==='category') renderCategory();
 if(page==='product') renderProduct();
 if(page==='cart') renderCart();
 updateCartCount();
