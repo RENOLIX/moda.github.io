@@ -42,7 +42,16 @@ function productCard(p){
 
 function renderHome(){
   document.querySelector('#app').innerHTML = `${header()}
-    <main><section class="hero--split"><div class="hero__text"><h1 class="hero__brand--thin hero-brand-reveal" aria-label="Moda Afair"><span>M</span><span>O</span><span>D</span><span>A</span><span>&nbsp;</span><span>A</span><span>F</span><span>A</span><span>I</span><span>R</span></h1><a class="btn--hero-dark" href="#collection">DÉCOUVRIR</a></div><div class="hero__frame"><img src="public/hero-moda.png" alt="Collection homme Moda Afair"><span class="hero__frame-border"></span></div></section>
+    <main><section class="hero hero--split">
+      <div class="hero__text">
+        <h1 class="hero__brand hero__brand--thin" aria-label="Moda Afair"><span>M</span><span>O</span><span>D</span><span>A</span><span>&nbsp;</span><span>A</span><span>F</span><span>A</span><span>I</span><span>R</span></h1>
+        <a class="btn btn--hero-dark" href="#collection">DÉCOUVRIR</a>
+      </div>
+      <div class="hero__frame">
+        <img class="hero__frame-video" src="public/hero-moda.png" alt="Collection homme Moda Afair">
+        <div class="hero__frame-border"></div>
+      </div>
+    </section>
     <section class="section reveal" id="collection"><div class="container"><div class="section-head"><div><span class="eyebrow">La Maison Moda</span><h2>Notre Collection</h2></div><p>Des pièces pensées pour révéler votre style.</p></div><div class="category-grid"><a class="category sneakers reveal reveal-delay-1" href="#nouveautes"><div class="category-copy"><h3>BASKETS</h3><p>Baskets urbaines pour toutes les occasions</p></div></a><a class="category clothes reveal reveal-delay-2" href="#nouveautes"><div class="category-copy"><h3>VÊTEMENTS</h3><p>Des essentiels modernes et raffinés</p></div></a></div></div></section>
     <section class="section section-soft reveal" id="nouveautes"><div class="container"><div class="section-head"><div><span class="eyebrow">Dernières arrivées</span><h2>Les nouveautés</h2></div><p>Découvrez les dernières pièces de notre collection.</p></div><div class="product-grid">${products.map(productCard).join('')}</div></div></section>
     <section class="editorial-promo reveal"><div class="editorial-promo__media"><img src="public/hero-moda.png" alt="Look masculin Moda Afair"></div><div class="editorial-promo__copy"><span class="eyebrow">Sélection Moda</span><h2>Le look de la semaine</h2><p>Une silhouette urbaine complète, construite autour de pièces sobres, fortes et faciles à porter.</p><a class="editorial-promo__link" href="produit.html?id=varsity-navy">Découvrir la sélection <span>↗</span></a></div></section>
@@ -74,7 +83,7 @@ function removeItem(key){ saveCart(loadCart().filter(i=>i.key!==key)); renderCar
 function placeOrder(event){ event.preventDefault(); alert('Commande enregistrée ! Nous vous contacterons pour la confirmer.'); localStorage.removeItem('moda-cart'); renderCart(); }
 function showToast(message){ const toast=document.querySelector('#toast'); toast.textContent=message; toast.classList.add('show'); setTimeout(()=>toast.classList.remove('show'),2400); }
 function showProductActions(media){ if(matchMedia('(hover: none)').matches) media.classList.toggle('show-actions'); }
-function initScrollReveal(){ const items=document.querySelectorAll('.reveal,.hero-brand-reveal'); if(!('IntersectionObserver' in window)){items.forEach(i=>i.classList.add('visible'));return;} const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('visible');observer.unobserve(entry.target)}}),{threshold:.12,rootMargin:'0px 0px -30px'}); items.forEach(item=>observer.observe(item)); }
+function initScrollReveal(){ const items=document.querySelectorAll('.reveal'); if(!('IntersectionObserver' in window)){items.forEach(i=>i.classList.add('visible'));return;} const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('visible');observer.unobserve(entry.target)}}),{threshold:.12,rootMargin:'0px 0px -30px'}); items.forEach(item=>observer.observe(item)); }
 
 const page=document.body.dataset.page;
 if(page==='home') renderHome();
