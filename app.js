@@ -1,3 +1,296 @@
+const deliveryRates = [
+  [
+    "Adrar",
+    1650,
+    850
+  ],
+  [
+    "Chlef",
+    700,
+    450
+  ],
+  [
+    "Laghouat",
+    850,
+    450
+  ],
+  [
+    "Oum El Bouaghi",
+    850,
+    450
+  ],
+  [
+    "Batna",
+    850,
+    450
+  ],
+  [
+    "Bejaia",
+    850,
+    450
+  ],
+  [
+    "Biskra",
+    850,
+    450
+  ],
+  [
+    "Bechar",
+    1200,
+    650
+  ],
+  [
+    "Blida",
+    650,
+    400
+  ],
+  [
+    "Bouira",
+    650,
+    450
+  ],
+  [
+    "Tamanrasset",
+    1800,
+    1000
+  ],
+  [
+    "Tebessa",
+    850,
+    450
+  ],
+  [
+    "Tlemcen",
+    850,
+    450
+  ],
+  [
+    "Tiaret",
+    850,
+    450
+  ],
+  [
+    "Tizi Ouzou",
+    650,
+    450
+  ],
+  [
+    "Alger",
+    450,
+    300
+  ],
+  [
+    "Djelfa",
+    850,
+    450
+  ],
+  [
+    "Jijel",
+    850,
+    450
+  ],
+  [
+    "Setif",
+    850,
+    450
+  ],
+  [
+    "Saida",
+    850,
+    450
+  ],
+  [
+    "Skikda",
+    850,
+    450
+  ],
+  [
+    "Sidi Bel Abbes",
+    850,
+    450
+  ],
+  [
+    "Annaba",
+    850,
+    450
+  ],
+  [
+    "Guelma",
+    850,
+    450
+  ],
+  [
+    "Constantine",
+    850,
+    450
+  ],
+  [
+    "Medea",
+    850,
+    450
+  ],
+  [
+    "Mostaganem",
+    850,
+    450
+  ],
+  [
+    "MSila",
+    850,
+    450
+  ],
+  [
+    "Mascara",
+    850,
+    450
+  ],
+  [
+    "Ouargla",
+    1000,
+    500
+  ],
+  [
+    "Oran",
+    850,
+    450
+  ],
+  [
+    "El Bayadh",
+    850,
+    450
+  ],
+  [
+    "Illizi",
+    1700,
+    850
+  ],
+  [
+    "Bordj Bou Arreridj",
+    650,
+    450
+  ],
+  [
+    "Boumerdes",
+    650,
+    400
+  ],
+  [
+    "El Tarf",
+    850,
+    550
+  ],
+  [
+    "Tindouf",
+    1650,
+    0
+  ],
+  [
+    "Tissemsilt",
+    850,
+    450
+  ],
+  [
+    "El Oued",
+    950,
+    600
+  ],
+  [
+    "Khenchela",
+    850,
+    450
+  ],
+  [
+    "Souk Ahras",
+    850,
+    450
+  ],
+  [
+    "Tipaza",
+    650,
+    450
+  ],
+  [
+    "Mila",
+    850,
+    450
+  ],
+  [
+    "Ain Defla",
+    650,
+    450
+  ],
+  [
+    "Naama",
+    950,
+    500
+  ],
+  [
+    "Ain Temouchent",
+    850,
+    450
+  ],
+  [
+    "Ghardaia",
+    950,
+    650
+  ],
+  [
+    "Relizane",
+    850,
+    450
+  ],
+  [
+    "Timimoun",
+    1650,
+    850
+  ],
+  [
+    "Bordj Badji Mokhtar",
+    1600,
+    0
+  ],
+  [
+    "Ouled Djellal",
+    950,
+    450
+  ],
+  [
+    "Beni Abbes",
+    1300,
+    0
+  ],
+  [
+    "In Salah",
+    1650,
+    850
+  ],
+  [
+    "In Guezzam",
+    1500,
+    0
+  ],
+  [
+    "Touggourt",
+    950,
+    500
+  ],
+  [
+    "Djanet",
+    2000,
+    1000
+  ],
+  [
+    "El Mghair",
+    950,
+    500
+  ],
+  [
+    "El Meniaa",
+    950,
+    500
+  ]
+].map(([name, domicile, bureau], index) => ({code:String(index+1).padStart(2,"0"), name, domicile, bureau}));
+
 const products = [
   { id:'sneakers-azur', name:'Sneakers Azur 01', category:'Baskets', price:8900, image:'public/sneakers-urbaines.png', colors:['Blanc / Bleu','Blanc / Graphite'], sizes:['40','41','42','43','44'], badge:'NOUVEAU', description:'Une basket basse au profil net, pensée pour la ville. Tige effet cuir, empiècements contrastés et semelle confortable pour un style précis du matin au soir.' },
   { id:'hoodie-noir', name:'Hoodie Essential Noir', category:'Vêtements', price:6200, image:'public/hoodie-essentiel.png', colors:['Noir','Graphite'], sizes:['S','M','L','XL','XXL'], badge:'NOUVEAU', description:'Hoodie lourd à coupe oversize, intérieur doux et finitions côtelées. Une pièce essentielle qui garde une silhouette structurée.' },
@@ -24,7 +317,7 @@ function header(){
     <nav class="nav-links" aria-label="Navigation principale">
       <a class="${currentPage==='home'?'active':''}" href="index.html">Accueil</a><a href="index.html#collection">Collection</a><a href="index.html#nouveautes">Nouveautés</a><a class="${currentCategory==='Vêtements'?'active':''}" href="vetements.html">Vêtements</a><a class="${currentCategory==='Baskets'?'active':''}" href="baskets.html">Baskets</a>
     </nav>
-    <div class="nav-actions"><button class="nav-icon" aria-label="Rechercher"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4 4"></path></svg></button><a class="nav-icon navbar-cart" href="panier.html" aria-label="Voir le panier"><svg viewBox="0 0 24 24"><path d="M6 8h12l-1 12H7L6 8Z"></path><path d="M9 8V6a3 3 0 0 1 6 0v2"></path></svg><span class="cart-count">0</span></a><span class="nav-icon" aria-label="Compte"><svg viewBox="0 0 24 24"><path d="M6.5 20v-2.5a5.5 5.5 0 0 1 11 0V20"></path><circle cx="12" cy="7" r="3.5"></circle></svg></span><button class="menu-btn" aria-label="Ouvrir le menu" onclick="document.body.classList.toggle('menu-open')"><span></span><span></span><span></span></button></div>
+    <div class="nav-actions"><button class="nav-icon" aria-label="Rechercher"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4 4"></path></svg></button><a class="nav-icon navbar-cart" href="panier.html" aria-label="Voir le panier"><svg viewBox="0 0 24 24"><path d="M6 8h12l-1 12H7L6 8Z"></path><path d="M9 8V6a3 3 0 0 1 6 0v2"></path></svg><span class="cart-count">0</span></a><button class="menu-btn" aria-label="Ouvrir le menu" onclick="document.body.classList.toggle('menu-open')"><span></span><span></span><span></span></button></div>
   </div></header>`;
 }
 
@@ -80,7 +373,35 @@ function renderCart(){
   const cart = loadCart();
   const items = cart.map(item=>({...item, product: products.find(p=>p.id===item.id)})).filter(i=>i.product);
   const subtotal = items.reduce((s,i)=>s+i.product.price*i.qty,0);
-  document.querySelector('#app').innerHTML = `${header()}<main><div class="page-title"><div class="container"><div class="breadcrumbs"><a href="index.html">Accueil</a> / Panier</div><h1>Votre panier</h1></div></div><div class="container cart-layout"><div>${items.length ? items.map(i=>`<article class="cart-item"><img src="${i.product.image}" alt="${i.product.name}"><div><h3>${i.product.name}</h3><div class="cart-meta">${i.color} · Taille ${i.size} · Qté ${i.qty}</div><button class="remove" onclick="removeItem('${i.key}')">Retirer</button></div><span class="price">${money(i.product.price*i.qty)}</span></article>`).join('') : `<div class="empty"><h2>Votre panier est vide</h2><p>Découvrez les dernières pièces Moda Afair.</p><a class="btn" href="index.html#nouveautes">Voir la collection</a></div>`}</div>${items.length ? `<aside class="summary"><h2>Récapitulatif</h2><div class="summary-line"><span>Sous-total</span><span>${money(subtotal)}</span></div><div class="summary-line"><span>Livraison</span><span>Calculée à la confirmation</span></div><div class="summary-line summary-total"><span>Total</span><span>${money(subtotal)}</span></div><form class="checkout-form" onsubmit="placeOrder(event)"><input required placeholder="Nom et prénom" aria-label="Nom et prénom"><input required type="tel" placeholder="Téléphone" aria-label="Téléphone"><input required placeholder="Wilaya" aria-label="Wilaya"><textarea required placeholder="Adresse de livraison" aria-label="Adresse de livraison"></textarea><button class="btn btn-wide" type="submit">Confirmer la commande</button></form></aside>`:''}</div></main>${footer()}`;
+  document.querySelector('#app').innerHTML = `${header()}<main><div class="page-title"><div class="container"><div class="breadcrumbs"><a href="index.html">Accueil</a> / Panier</div><h1>Votre panier</h1></div></div><div class="container cart-layout"><div>${items.length ? items.map(i=>`<article class="cart-item"><img src="${i.product.image}" alt="${i.product.name}"><div><h3>${i.product.name}</h3><div class="cart-meta">${i.color} · Taille ${i.size} · Qté ${i.qty}</div><button class="remove" onclick="removeItem('${i.key}')">Retirer</button></div><span class="price">${money(i.product.price*i.qty)}</span></article>`).join('') : `<div class="empty"><h2>Votre panier est vide</h2><p>Découvrez les dernières pièces Moda Afair.</p><a class="btn" href="index.html#nouveautes">Voir la collection</a></div>`}</div>${items.length ? `<aside class="summary"><h2>Récapitulatif</h2><div class="summary-line"><span>Sous-total</span><span>${money(subtotal)}</span></div><div class="summary-line"><span>Livraison</span><span id="delivery-fee" aria-live="polite">Choisissez votre wilaya</span></div><div class="summary-line summary-total"><span>Total</span><span id="order-total" aria-live="polite">À calculer</span></div><form class="checkout-form" onsubmit="placeOrder(event)"><input required placeholder="Nom et prénom" aria-label="Nom et prénom"><input required type="tel" placeholder="Téléphone" aria-label="Téléphone"><label for="wilaya">Wilaya</label><select id="wilaya" name="wilaya" required onchange="updateDelivery()"><option value="">Choisissez votre wilaya</option>${deliveryRates.map(w=>`<option value="${w.code}">${w.code} — ${w.name}</option>`).join('')}</select><label for="delivery-mode">Mode de livraison</label><select id="delivery-mode" name="deliveryMode" required onchange="updateDelivery()"><option value="domicile">À domicile</option><option value="bureau">Au bureau</option></select><label id="delivery-address-label" for="delivery-address">Adresse de livraison</label><textarea id="delivery-address" name="address" required placeholder="Commune et adresse complète" aria-label="Adresse de livraison"></textarea><button class="btn btn-wide" type="submit">Confirmer la commande</button></form></aside>`:''}</div></main>${footer()}`;
+}
+
+function getDeliveryQuote(code, mode, subtotal){
+  const rate = deliveryRates.find(w=>w.code===code);
+  if(!rate || !['domicile','bureau'].includes(mode) || (mode==='bureau' && rate.bureau===0)) return null;
+  return {fee:rate[mode], total:subtotal+rate[mode]};
+}
+function updateDelivery(){
+  const wilaya = document.querySelector('#wilaya');
+  if(!wilaya) return;
+  const modeSelect = document.querySelector('#delivery-mode');
+  const rate = deliveryRates.find(w=>w.code===wilaya.value);
+  const bureauOption = modeSelect.querySelector('option[value="bureau"]');
+  bureauOption.disabled = !!rate && rate.bureau===0;
+  bureauOption.textContent = bureauOption.disabled ? 'Au bureau — indisponible dans cette wilaya' : 'Au bureau';
+  if(bureauOption.disabled && modeSelect.value==='bureau') modeSelect.value='domicile';
+  const mode = modeSelect.value;
+  const subtotal = loadCart().reduce((sum,item)=>{
+    const product=products.find(p=>p.id===item.id);
+    return sum+(product ? product.price*item.qty : 0);
+  },0);
+  const quote=getDeliveryQuote(wilaya.value,mode,subtotal);
+  document.querySelector('#delivery-fee').textContent=quote ? money(quote.fee) : 'Choisissez votre wilaya';
+  document.querySelector('#order-total').textContent=quote ? money(quote.total) : 'À calculer';
+  document.querySelector('#delivery-address-label').textContent=mode==='bureau' ? 'Bureau de retrait / commune' : 'Adresse de livraison';
+  const address=document.querySelector('#delivery-address');
+  address.placeholder=mode==='bureau' ? 'Indiquez le bureau de retrait ou la commune' : 'Commune et adresse complète';
+  address.setAttribute('aria-label',document.querySelector('#delivery-address-label').textContent);
 }
 
 function colorHex(name){ const n=name.toLowerCase(); if(n.includes('marine')||n.includes('bleu')) return '#123554'; if(n.includes('graphite')) return '#50545b'; if(n.includes('noir')) return '#171717'; if(n.includes('blanc')) return '#eeeae3'; return '#6f7053'; }
