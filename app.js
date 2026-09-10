@@ -327,7 +327,7 @@ function footer(){
     <div><h3>Navigation</h3><div class="footer-links"><a href="index.html">Accueil</a><a href="baskets.html">Baskets</a><a href="vetements.html">Vêtements</a><a href="panier.html">Panier</a></div></div>
     <div><h3>Informations</h3><div class="footer-links"><a href="#">Livraison</a><a href="#">Échanges</a><a href="#">Guide des tailles</a></div></div>
     <div><h3>Nous contacter</h3><p>Afair, Algérie<br>Dim–Jeu · 09h–18h<br>Instagram · Facebook</p></div></div>
-    <div class="copyright"><span>© 2026 MODA AFAIR — Tous droits réservés.</span><span>Style masculin, sans compromis.</span></div>
+    <div class="copyright"><span>© 2026 MODA AFAIR — Tous droits réservés.</span><a href="https://sitemagique.com">devloped by SITEMAGIQUE</a></div>
   </div></footer><div class="toast" id="toast">Ajouté au panier</div>`;
 }
 
