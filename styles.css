@@ -127,6 +127,32 @@ h1, h2, h3 { font-family: var(--font-serif); margin: 0; line-height: .98; letter
 .editorial-promo__copy p { max-width:470px;margin:0 0 34px;color:#b4bfce;line-height:1.8; }
 .editorial-promo__link { display:inline-flex;align-items:center;gap:38px;padding:14px 22px;border:1px solid rgba(255,255,255,.72);border-radius:999px;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;transition:.3s; }
 .editorial-promo__link:hover { color:#07111f;background:#fff;transform:translateY(-2px); }
+.social-section { padding:clamp(74px,10vw,130px) 0;background:#f8f7f5; }
+.social-heading { max-width:690px;margin:0 auto 56px;text-align:center; }
+.social-heading h2 { margin:17px 0 18px;font-size:clamp(3rem,5.5vw,5.6rem);font-weight:400; }
+.social-heading p { margin:0;color:var(--muted);font-size:1rem;line-height:1.6; }
+.social-grid { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px;max-width:930px;margin:0 auto; }
+.social-card { padding:26px;border:2px solid;border-radius:28px;background:#fff; }
+.social-card--instagram { border-color:#d247d7; }
+.social-card--tiktok { border-color:#16a8e8; }
+.social-card__profile { display:flex;align-items:center;gap:14px;margin-bottom:21px; }
+.social-icon { width:48px;height:48px;border-radius:50%;display:grid;place-items:center;color:#fff;flex:0 0 48px; }
+.social-icon svg { width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round; }
+.social-icon--instagram { background:linear-gradient(135deg,#ffbe5c,#f8428a 48%,#8a33d4); }
+.social-icon--tiktok { background:#0e1014; }
+.social-icon--tiktok svg { fill:currentColor;stroke:none; }
+.social-card__profile strong { display:block;font-size:1rem; }
+.social-card__profile div span { display:block;margin-top:3px;color:var(--muted);font-size:.67rem;letter-spacing:.16em;font-weight:700; }
+.social-card__images { display:grid;grid-template-columns:repeat(3,1fr);gap:7px; }
+.social-card__images img { width:100%;height:112px;object-fit:cover;border-radius:13px; }
+.social-card__images img:first-child { object-position:center; }
+.social-card__images img:nth-child(2) { object-position:center 24%; }
+.social-card__images img:last-child { object-position:center; }
+.social-card p { min-height:51px;margin:18px 0;color:#374151;font-size:.9rem;line-height:1.55; }
+.social-card__link { min-height:48px;display:flex;align-items:center;justify-content:center;gap:12px;border-radius:999px;color:#fff!important;font-size:.74rem!important;font-weight:800;letter-spacing:.1em;text-transform:uppercase;transition:transform .25s,filter .25s; }
+.social-card--instagram .social-card__link { background:linear-gradient(90deg,#ffb257,#f64f88 48%,#8b2ee8); }
+.social-card--tiktok .social-card__link { background:#111318; }
+.social-card__link:hover { transform:translateY(-2px);filter:brightness(1.08); }
 .service-strip { --neo-bg:var(--paper);--neo-light:#fff;--neo-dark:#cfd8e3;display:grid;grid-template-columns:repeat(4,1fr);gap:24px;padding:64px max(5vw,30px);border-top:0;background:var(--neo-bg); }
 .service-line { min-height:250px;padding:34px 22px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;border:0;border-radius:20px;background:var(--neo-bg);box-shadow:inset 10px 10px 20px var(--neo-dark),inset -10px -10px 20px var(--neo-light);transition:color .25s,box-shadow .25s; }
 .service-line svg { width:70px;height:70px;padding:16px;flex:0 0 70px;fill:none;stroke:var(--blue);stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;margin:0 auto 26px;border-radius:20px;background:var(--neo-bg);box-shadow:10px 10px 20px var(--neo-dark),-10px -10px 20px var(--neo-light);transition:transform .25s,box-shadow .25s; }
@@ -228,6 +254,7 @@ h1, h2, h3 { font-family: var(--font-serif); margin: 0; line-height: .98; letter
   .service-strip { grid-template-columns:repeat(2,1fr);padding:50px 24px; }
   .editorial-promo { grid-template-columns:1fr; }
   .editorial-promo__media { min-height:480px; }
+  .social-grid { gap:20px; }
   .service:nth-child(2) { border-right: 0; }
   .service:nth-child(-n+2) { border-bottom: 1px solid rgba(255,255,255,.12); }
   .footer-grid { grid-template-columns: repeat(2, 1fr); }
@@ -246,6 +273,11 @@ h1, h2, h3 { font-family: var(--font-serif); margin: 0; line-height: .98; letter
   .category p { font-size:.72rem; }
   .editorial-promo__media { min-height:420px; }
   .editorial-promo__copy { padding:52px 24px 62px; }
+  .social-section { padding:72px 0; }
+  .social-heading { margin-bottom:34px; }
+  .social-grid { grid-template-columns:1fr;gap:18px; }
+  .social-card { padding:20px; }
+  .social-card__images img { height:104px; }
   .product-grid { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; }
   .product-info { padding: 12px; }
   .product-info h3 { font-size: 1.15rem; }
