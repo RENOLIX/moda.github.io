@@ -436,8 +436,8 @@ async function placeOrder(event){
   const quote = getDeliveryQuote(wilaya?.code,mode,subtotal);
   if(!wilaya || !quote){ showToast('Choisissez une wilaya et un mode de livraison disponible.'); return; }
   const customer = {
-    name: form.querySelector('[name="name"]').value.trim(),
-    phone: form.querySelector('[name="phone"]').value.trim(),
+    name: (form.querySelector('[name="name"]') || form.querySelector('input[placeholder="Nom et prénom"]')).value.trim(),
+    phone: (form.querySelector('[name="phone"]') || form.querySelector('input[placeholder="Téléphone"]')).value.trim(),
     wilaya: wilaya.code,
     wilayaName: wilaya.name,
     deliveryMode: mode,
