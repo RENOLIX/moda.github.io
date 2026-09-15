@@ -1,4 +1,4 @@
-const deliveryRates = [
+let deliveryRates = [
   [
     "Adrar",
     1650,
@@ -291,7 +291,7 @@ const deliveryRates = [
   ]
 ].map(([name, domicile, bureau], index) => ({code:String(index+1).padStart(2,"0"), name, domicile, bureau}));
 
-const products = [
+let products = [
   { id:'urban-shadow', name:'Urban Shadow', category:'Baskets', price:8900, image:'public/basket-01.jpeg', colors:['Noir / Gris'], sizes:['39','40','41','42','43'], badge:'NOUVEAU', description:'Basket urbaine noire à semelle épaisse et détails graphiques.' },
   { id:'urban-contrast', name:'Urban Contrast', category:'Baskets', price:8900, image:'public/basket-02.jpeg', colors:['Noir / Blanc'], sizes:['39','40','41','42','43'], badge:'NOUVEAU', description:'Modèle contrasté noir et blanc, pensé pour un look affirmé.' },
   { id:'urban-ice', name:'Urban Ice', category:'Baskets', price:8900, image:'public/basket-03.jpeg', colors:['Blanc'], sizes:['39','40','41','42','43'], badge:'NOUVEAU', description:'Basket blanche monochrome avec une silhouette moderne et légère.' },
@@ -422,7 +422,35 @@ function addDetailed(id){ const p=products.find(x=>x.id===id); addToCart(p,docum
 function addToCart(p,color,size,qty){ const cart=loadCart(); const key=`${p.id}-${color}-${size}`; const found=cart.find(i=>i.key===key); if(found) found.qty+=qty; else cart.push({key,id:p.id,color,size,qty}); saveCart(cart); showToast(`${p.name} ajouté au panier`); }
 function changeQty(amount){ const input=document.querySelector('#qty'); input.value=Math.max(1,Math.min(10,Number(input.value)+amount)); }
 function removeItem(key){ saveCart(loadCart().filter(i=>i.key!==key)); renderCart(); updateCartCount(); }
-function placeOrder(event){ event.preventDefault(); alert('Commande enregistrée ! Nous vous contacterons pour la confirmer.'); localStorage.removeItem('moda-cart'); renderCart(); }
+async function placeOrder(event){
+  event.preventDefault();
+  const form = event.currentTarget;
+  const cart = loadCart();
+  const items = cart.map(item=>{
+    const product=products.find(p=>p.id===item.id);
+    return product ? {id:product.id,name:product.name,price:product.price,qty:item.qty,color:item.color,size:item.size} : null;
+  }).filter(Boolean);
+  const subtotal = items.reduce((total,item)=>total+item.price*item.qty,0);
+  const wilaya = deliveryRates.find(item=>item.code===form.querySelector('#wilaya').value);
+  const mode = form.querySelector('#delivery-mode').value;
+  const quote = getDeliveryQuote(wilaya?.code,mode,subtotal);
+  if(!wilaya || !quote){ showToast('Choisissez une wilaya et un mode de livraison disponible.'); return; }
+  const customer = {
+    name: form.querySelector('[name="name"]').value.trim(),
+    phone: form.querySelector('[name="phone"]').value.trim(),
+    wilaya: wilaya.code,
+    wilayaName: wilaya.name,
+    deliveryMode: mode,
+    address: form.querySelector('#delivery-address').value.trim()
+  };
+  try {
+    if(window.createFirebaseOrder) await window.createFirebaseOrder({items,customer,subtotal,deliveryFee:quote.fee,total:quote.total});
+    else throw new Error('Connexion sécurisée en cours de chargement. Réessayez dans un instant.');
+    localStorage.removeItem('moda-cart');
+    alert('Commande enregistrée ! Nous vous contacterons pour la confirmer.');
+    renderCart();
+  } catch(error) { showToast(error.message || 'Impossible d’enregistrer la commande.'); }
+}
 function showToast(message){ const toast=document.querySelector('#toast'); toast.textContent=message; toast.classList.add('show'); setTimeout(()=>toast.classList.remove('show'),2400); }
 function initScrollReveal(){ const items=document.querySelectorAll('.reveal'); if(!('IntersectionObserver' in window)){items.forEach(i=>i.classList.add('visible'));return;} const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('visible');observer.unobserve(entry.target)}}),{threshold:.12,rootMargin:'0px 0px -30px'}); items.forEach(item=>observer.observe(item)); }
 
@@ -433,3 +461,21 @@ if(page==='product') renderProduct();
 if(page==='cart') renderCart();
 updateCartCount();
 initScrollReveal();
+
+window.setFirebaseProducts = function(remoteProducts){
+  products = remoteProducts.map(product=>({
+    ...product,
+    image: product.image || 'public/basket-01.jpeg',
+    colors: Array.isArray(product.colors) && product.colors.length ? product.colors : ['Noir'],
+    sizes: Array.isArray(product.sizes) && product.sizes.length ? product.sizes : ['39','40','41','42','43']
+  }));
+  if(page==='home') renderHome();
+  if(page==='category') renderCategory();
+  if(page==='product') renderProduct();
+  if(page==='cart') renderCart();
+  updateCartCount(); initScrollReveal();
+};
+window.setFirebaseDeliveryRates = function(remoteRates){
+  deliveryRates = remoteRates;
+  if(page==='cart') renderCart();
+};
