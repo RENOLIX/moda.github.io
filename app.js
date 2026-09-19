@@ -388,6 +388,10 @@ function renderCart(){
   document.querySelector('#app').innerHTML = `${header()}<main><div class="page-title"><div class="container"><div class="breadcrumbs"><a href="/">Accueil</a> / Panier</div><h1>Votre panier</h1></div></div><div class="container cart-layout"><div>${items.length ? items.map(i=>`<article class="cart-item"><img src="${i.product.image}" alt="${i.product.name}"><div><h3>${i.product.name}</h3><div class="cart-meta">${i.color} · Taille ${i.size} · Qté ${i.qty}</div><button class="remove" onclick="removeItem('${i.key}')">Retirer</button></div><span class="price">${money(i.product.price*i.qty)}</span></article>`).join('') : `<div class="empty"><h2>Votre panier est vide</h2><p>Découvrez les dernières pièces Moda Afair.</p><a class="btn" href="/#nouveautes">Voir la collection</a></div>`}</div>${items.length ? `<aside class="summary checkout-summary"><h2>Résumé de la commande</h2><div class="summary-line"><span>Sous-total</span><span>${money(subtotal)}</span></div><div class="summary-line"><span>Livraison</span><span id="delivery-fee" aria-live="polite">Choisissez votre wilaya</span></div><div class="summary-line summary-total"><span>Total</span><span id="order-total" aria-live="polite">À calculer</span></div><form class="checkout-form" onsubmit="placeOrder(event)"><input required placeholder="Nom et prénom" aria-label="Nom et prénom"><input required type="tel" placeholder="Téléphone" aria-label="Téléphone"><label for="wilaya">Wilaya</label><select id="wilaya" name="wilaya" required onchange="updateDelivery()"><option value="">Choisissez votre wilaya</option>${deliveryRates.map(w=>`<option value="${w.code}">${w.code} — ${w.name}</option>`).join('')}</select><label for="delivery-mode">Mode de livraison</label><select id="delivery-mode" name="deliveryMode" required disabled onchange="updateDelivery()"><option value="">Choisissez d’abord votre wilaya</option></select><label id="delivery-address-label" for="delivery-address">Adresse de livraison</label><textarea id="delivery-address" name="address" required placeholder="Commune et adresse complète" aria-label="Adresse de livraison"></textarea><button class="btn btn-wide" type="submit">Confirmer la commande</button></form></aside>`:''}</div></main>${footer()}`;
 }
 
+function renderProductLoading(){
+  document.querySelector('#app').innerHTML = '<main class="product-loading" aria-busy="true" aria-live="polite"><span>Chargement du produit…</span></main>';
+}
+
 function getDeliveryQuote(code, mode, subtotal){
   const rate = deliveryRates.find(w=>w.code===code);
   if(!rate || !['domicile','bureau'].includes(mode) || (mode==='bureau' && rate.bureau===0)) return null;
@@ -455,7 +459,9 @@ function initScrollReveal(){ const items=document.querySelectorAll('.reveal'); i
 const page=document.body.dataset.page;
 if(page==='home') renderHome();
 if(page==='category') renderCategory();
-if(page==='product') renderProduct();
+// La fiche attend le catalogue Firebase : cela évite d'afficher un ancien
+// produit local pendant quelques instants avant le produit demandé.
+if(page==='product') renderProductLoading();
 if(page==='cart') renderCart();
 updateCartCount();
 initScrollReveal();
@@ -472,6 +478,9 @@ window.setFirebaseProducts = function(remoteProducts){
   if(page==='product') renderProduct();
   if(page==='cart') renderCart();
   updateCartCount(); initScrollReveal();
+};
+window.renderProductFallback = function(){
+  if(page==='product') renderProduct();
 };
 window.setFirebaseDeliveryRates = function(remoteRates){
   deliveryRates = remoteRates;

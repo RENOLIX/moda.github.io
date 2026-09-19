@@ -6,11 +6,20 @@ const safely = async (work) => {
 };
 
 const productRef = collection(db, 'products');
-onSnapshot(productRef, (snapshot) => {
+let receivedServerProducts = false;
+onSnapshot(productRef, { includeMetadataChanges: true }, (snapshot) => {
+  // Firestore peut fournir une ancienne copie locale avant la réponse serveur.
+  // On l'ignore lors du premier chargement pour ne jamais faire clignoter une
+  // fiche de produit précédente avant la bonne fiche.
+  if (snapshot.metadata.fromCache && !receivedServerProducts) return;
   if (!snapshot.empty && window.setFirebaseProducts) {
+    receivedServerProducts = true;
     window.setFirebaseProducts(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
   }
-}, error => console.warn('Catalogue Firebase indisponible:', error.message));
+}, error => {
+  console.warn('Catalogue Firebase indisponible:', error.message);
+  window.renderProductFallback?.();
+});
 
 safely(async () => {
   const snapshot = await getDocs(collection(db, 'deliveryRates'));

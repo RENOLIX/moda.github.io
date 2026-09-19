@@ -186,6 +186,7 @@ h1, h2, h3 { font-family: var(--font-serif); margin: 0; line-height: .98; letter
 .page-title h1 { font-size: clamp(3rem, 7vw, 6rem); }
 .breadcrumbs { color: #9cadc3; font-size: .8rem; margin-bottom: 14px; }
 .product-page { display: grid; grid-template-columns: 1.05fr .95fr; gap: clamp(38px, 7vw, 86px); padding: 70px 0 90px; align-items: start; }
+.product-loading { min-height: 100svh; display: grid; place-items: center; background: var(--paper); color: var(--ink); font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; }
 .product-gallery { background: var(--paper); position: sticky; top: 110px; }
 .product-gallery img { width: 100%; aspect-ratio: 1; object-fit: cover; object-position: center 82%; }
 .product-detail .eyebrow { margin-bottom: 12px; }
