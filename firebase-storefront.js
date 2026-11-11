@@ -6,6 +6,11 @@ const safely = async (work) => {
 };
 
 const productRef = collection(db, 'products');
+window.loadFirebaseProductPhotos = async (productId, photoIds) => {
+  const snapshot = await getDocs(collection(db, 'products', productId, 'photos'));
+  const photos = new Map(snapshot.docs.map(doc => [doc.id, doc.data().image]));
+  return photoIds.map(id => photos.get(id)).filter(Boolean);
+};
 let receivedServerProducts = false;
 onSnapshot(productRef, { includeMetadataChanges: true }, (snapshot) => {
   // Firestore peut fournir une ancienne copie locale avant la réponse serveur.

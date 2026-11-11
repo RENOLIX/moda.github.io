@@ -379,6 +379,54 @@ function renderProduct(){
   const p = products.find(item=>item.id===id) || products[0];
   document.title = `${p.name} — Moda Afair`;
   document.querySelector('#app').innerHTML = `${header()}<main><div class="page-title"><div class="container"><div class="breadcrumbs"><a href="/">Accueil</a> / ${p.category} / ${p.name}</div><h1>${p.category}</h1></div></div><div class="container product-page"><div class="product-gallery"><img src="${p.image}" alt="${p.name}"></div><section class="product-detail"><span class="eyebrow">${p.badge || 'Collection Moda'}</span><h1>${p.name}</h1><div class="detail-price">${money(p.price)}</div><p class="description">${p.description}</p><div class="option"><span class="option-label">Couleur</span><input id="color" type="hidden" value="${p.colors[0]}"><div class="color-choices" role="radiogroup" aria-label="Couleur">${p.colors.map((c,i)=>`<button class="color-choice${i===0?' selected':''}" type="button" role="radio" aria-checked="${i===0}" aria-label="${c}" title="${c}" data-value="${c}" style="--swatch:${colorHex(c)}" onclick="selectChoice(this,'color')"><span>✓</span></button>`).join('')}</div></div><div class="option"><span class="option-label">Taille</span><input id="size" type="hidden" value="${p.sizes[0]}"><div class="size-choices" role="radiogroup" aria-label="Taille">${p.sizes.map((s,i)=>`<button class="size-choice${i===0?' selected':''}" type="button" role="radio" aria-checked="${i===0}" data-value="${s}" onclick="selectChoice(this,'size')">${s}</button>`).join('')}</div></div><div class="qty-add"><div class="qty"><button onclick="changeQty(-1)" aria-label="Diminuer">−</button><input id="qty" value="1" readonly aria-label="Quantité"><button onclick="changeQty(1)" aria-label="Augmenter">+</button></div><button class="detail-add-btn" onclick="addDetailed('${p.id}')">Ajouter au panier</button></div><div class="detail-notes"><span>✓ Paiement à la livraison</span><span>✓ Livraison partout en Algérie</span><span>✓ Échange de taille sous 7 jours</span></div></section></div><section class="section section-soft"><div class="container"><div class="section-head"><h2>Vous aimerez aussi</h2></div><div class="product-grid">${products.filter(x=>x.id!==p.id).slice(0,4).map(productCard).join('')}</div></div></section></main>${footer()}`;
+  loadProductGallery(p);
+}
+
+const galleryCache = new Map();
+async function loadProductGallery(product){
+  const gallery=document.querySelector('.product-gallery');
+  if(!gallery)return;
+  const photos=[product.image];
+  showProductGallery(gallery,photos,product.name);
+  if(!product.photoIds?.length || product.photoIds.length<2 || !window.loadFirebaseProductPhotos)return;
+  const key=`${product.id}:${product.photoIds.join(',')}`;
+  try{
+    if(!galleryCache.has(key))galleryCache.set(key,window.loadFirebaseProductPhotos(product.id,product.photoIds));
+    const images=await galleryCache.get(key);
+    if(gallery.isConnected && images.length)showProductGallery(gallery,images,product.name);
+  }catch(error){
+    galleryCache.delete(key);
+    if(!gallery.isConnected)return;
+    const retry=document.createElement('button');retry.type='button';retry.className='gallery-retry';retry.textContent='Afficher les autres photos';
+    retry.onclick=()=>loadProductGallery(product);gallery.append(retry);
+  }
+}
+function showProductGallery(gallery,photos,name){
+  gallery.replaceChildren();
+  gallery.setAttribute('aria-label',`Photos de ${name}`);
+  const stage=document.createElement('div');stage.className='product-gallery-stage';stage.tabIndex=0;
+  const image=document.createElement('img');image.className='product-main-image';image.src=photos[0];image.alt=`${name} — photo 1`;image.decoding='async';stage.append(image);gallery.append(stage);
+  if(photos.length<2)return;
+  let selected=0;
+  const thumbnails=document.createElement('div');thumbnails.className='product-thumbnails';thumbnails.setAttribute('aria-label','Choisir une photo');
+  const counter=document.createElement('span');counter.className='gallery-counter';counter.setAttribute('aria-live','polite');
+  const choose=index=>{
+    selected=(index+photos.length)%photos.length;image.src=photos[selected];image.alt=`${name} — photo ${selected+1}`;
+    [...thumbnails.children].forEach((button,i)=>button.setAttribute('aria-pressed',String(i===selected)));
+    counter.textContent=`${selected+1} / ${photos.length}`;
+  };
+  for(const [index,src] of photos.entries()){
+    const button=document.createElement('button');button.type='button';button.setAttribute('aria-label',`Voir la photo ${index+1}`);button.setAttribute('aria-pressed',String(index===0));
+    const thumb=document.createElement('img');thumb.src=src;thumb.alt='';thumb.loading='lazy';button.append(thumb);button.onclick=()=>choose(index);thumbnails.append(button);
+  }
+  for(const [direction,label,symbol] of [[-1,'Photo précédente','‹'],[1,'Photo suivante','›']]){
+    const button=document.createElement('button');button.type='button';button.className=`gallery-arrow ${direction<0?'previous':'next'}`;button.setAttribute('aria-label',label);button.textContent=symbol;button.onclick=()=>choose(selected+direction);stage.append(button);
+  }
+  stage.addEventListener('keydown',event=>{if(['ArrowLeft','ArrowRight'].includes(event.key)){event.preventDefault();choose(selected+(event.key==='ArrowRight'?1:-1));}});
+  let touch=null;
+  stage.addEventListener('touchstart',event=>{touch=event.touches.length===1?{x:event.touches[0].clientX,y:event.touches[0].clientY}:null;},{passive:true});
+  stage.addEventListener('touchend',event=>{if(!touch)return;const dx=event.changedTouches[0].clientX-touch.x,dy=event.changedTouches[0].clientY-touch.y;if(Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)*1.5)choose(selected+(dx<0?1:-1));touch=null;},{passive:true});
+  stage.append(counter);gallery.append(thumbnails);choose(0);
 }
 
 function renderCart(){
